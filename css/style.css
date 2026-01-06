@@ -153,7 +153,16 @@ body {
     50% { opacity: 0.65; }
 }
 
-/* Navegación Radial Única */
+/* Clases de visibilidad */
+.desktop-only {
+    display: block;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* Navegación Radial Única - Solo Desktop */
 .radial-nav {
     position: fixed;
     top: 50%;
@@ -459,6 +468,43 @@ body {
 .theme-toggle:hover {
     transform: scale(1.15) rotate(15deg);
     box-shadow: 0 12px 35px var(--shadow-purple), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+/* Toggle de Idioma */
+.language-toggle {
+    position: fixed;
+    bottom: 120px;
+    right: 40px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+    background-size: 200% 200%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px var(--shadow-blue);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    animation: gradient-shift 5s ease infinite;
+}
+
+.language-toggle:hover {
+    transform: scale(1.15);
+    box-shadow: 0 12px 35px var(--shadow-blue), 0 0 40px rgba(59, 130, 246, 0.4);
+}
+
+.language-toggle .lang-code {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 2px;
 }
 
 /* Secciones */
@@ -917,154 +963,215 @@ body {
     box-shadow: 0 10px 35px rgba(0, 119, 181, 0.5);
 }
 
-/* Footer */
-.footer {
-    background: var(--bg-secondary);
-    border-top: 2px solid rgba(139, 92, 246, 0.2);
-    color: var(--text-secondary);
-}
 
 /* Scroll suave */
 html {
     scroll-behavior: smooth;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Solo para móviles (teléfonos) */
+@media (max-width: 600px) {
+    /* Ajustes generales */
+    .section {
+        padding: 60px 0;
+        min-height: auto;
+    }
+    
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    /* Ocultar menú radial en móviles */
+    .desktop-only {
+        display: none !important;
+    }
+    
+    /* Mostrar menú móvil */
+    .mobile-only {
+        display: block !important;
+    }
+    
     .radial-nav {
-        right: 30px;
-        top: 45%;
+        display: none !important;
     }
     
     .theme-toggle {
-        bottom: 30px;
-        right: 30px;
-        width: 55px;
-        height: 55px;
-        font-size: 22px;
-    }
-    
-    .nav-center-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-    }
-    
-    .nav-dot {
+        bottom: 20px;
+        right: 20px;
         width: 50px;
         height: 50px;
-        font-size: 18px;
+        font-size: 20px;
     }
     
-    .nav-radial-menu {
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .profile-photo-placeholder {
         width: 200px;
         height: 200px;
     }
     
-    /* Ajustar posiciones en móvil con radio más pequeño */
-    .nav-dot[data-angle="0"] {
-        transform: translate(-50%, calc(-50% - 75px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="0"] {
-        transform: translate(-50%, calc(-50% - 75px)) scale(1);
-    }
-    
-    .nav-dot[data-angle="60"] {
-        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="60"] {
-        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(1);
-    }
-    
-    .nav-dot[data-angle="120"] {
-        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="120"] {
-        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(1);
-    }
-    
-    .nav-dot[data-angle="180"] {
-        transform: translate(-50%, calc(-50% + 75px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="180"] {
-        transform: translate(-50%, calc(-50% + 75px)) scale(1);
-    }
-    
-    .nav-dot[data-angle="240"] {
-        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="240"] {
-        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(1);
-    }
-    
-    .nav-dot[data-angle="300"] {
-        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(0);
-    }
-    
-    .nav-radial-menu.active .nav-dot[data-angle="300"] {
-        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(1);
-    }
-    
-    /* Hover en móvil */
-    .nav-dot[data-angle="0"]:hover {
-        transform: translate(-50%, calc(-50% - 75px)) scale(1.2) !important;
-    }
-    
-    .nav-dot[data-angle="60"]:hover {
-        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(1.2) !important;
-    }
-    
-    .nav-dot[data-angle="120"]:hover {
-        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(1.2) !important;
-    }
-    
-    .nav-dot[data-angle="180"]:hover {
-        transform: translate(-50%, calc(-50% + 75px)) scale(1.2) !important;
-    }
-    
-    .nav-dot[data-angle="240"]:hover {
-        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(1.2) !important;
-    }
-    
-    .nav-dot[data-angle="300"]:hover {
-        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(1.2) !important;
-    }
-    
-    .section-title {
-        font-size: 2.5rem;
-    }
-    
-    .profile-photo-placeholder {
-        width: 250px;
-        height: 250px;
-    }
-    
     .profile-photo-placeholder i {
-        font-size: 80px;
+        font-size: 70px;
     }
     
-    .nav-label {
-        display: none;
+    .profile-photo-placeholder p {
+        font-size: 12px;
+    }
+    
+    .professions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .badge-profession {
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+    
+    .tech-badges {
+        gap: 8px;
+    }
+    
+    .tech-badge {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+    
+    /* Títulos de sección */
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+    
+    /* Proyectos */
+    .project-card {
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    
+    .project-icon {
+        font-size: 40px;
+    }
+    
+    .project-title {
+        font-size: 1.5rem;
+    }
+    
+    .project-description {
+        font-size: 14px;
+    }
+    
+    /* Skills */
+    .skill-category {
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    
+    .skill-icon {
+        font-size: 40px;
+    }
+    
+    .skill-category h3 {
+        font-size: 1.4rem;
+    }
+    
+    .skill-list li {
+        font-size: 14px;
+    }
+    
+    /* Sobre Mí */
+    .about-content {
+        padding: 30px;
+    }
+    
+    .about-content p {
+        font-size: 15px;
+    }
+    
+    /* Contacto */
+    .contact-info {
+        padding: 30px;
+    }
+    
+    .contact-icon {
+        font-size: 40px;
+    }
+    
+    .contact-item h4 {
+        font-size: 18px;
+    }
+    
+    .contact-item a {
+        font-size: 15px;
+    }
+    
+    /* Botones */
+    .btn-primary,
+    .btn-success {
+        padding: 12px 25px;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .language-toggle {
+        bottom: 110px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+    
+    .language-toggle .lang-code {
+        font-size: 10px;
     }
 }
 
+/* Teléfonos pequeños */
 @media (max-width: 480px) {
     .section {
-        padding: 80px 0;
+        padding: 50px 0;
     }
     
-    .nav-radial-menu {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .nav-dot {
+    .theme-toggle {
+        bottom: 15px;
+        right: 15px;
         width: 45px;
         height: 45px;
+        font-size: 18px;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.75rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .profile-photo-placeholder {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .profile-photo-placeholder i {
+        font-size: 60px;
     }
 }

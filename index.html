@@ -15,31 +15,31 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="dark-theme">
-    <!-- Navegación Radial Creativa -->
-    <nav class="radial-nav" id="radialNav">
+    <!-- Navegación Radial Creativa - Solo Desktop -->
+    <nav class="radial-nav desktop-only" id="radialNav">
         <button class="nav-center-btn" id="navToggle" aria-label="Menú de navegación">
             <span class="nav-icon"></span>
         </button>
         <div class="nav-radial-menu" id="navMenu">
             <a href="#inicio" class="nav-dot" data-section="inicio" data-angle="0">
                 <i class="fas fa-home"></i>
-                <span class="nav-label">Inicio</span>
+                <span class="nav-label" data-i18n="nav-inicio">Inicio</span>
             </a>
             <a href="#proyectos" class="nav-dot" data-section="proyectos" data-angle="60">
                 <i class="fas fa-code"></i>
-                <span class="nav-label">Proyectos</span>
+                <span class="nav-label" data-i18n="nav-proyectos">Proyectos</span>
             </a>
             <a href="#skills" class="nav-dot" data-section="skills" data-angle="120">
                 <i class="fas fa-tools"></i>
-                <span class="nav-label">Skills</span>
+                <span class="nav-label" data-i18n="nav-skills">Skills</span>
             </a>
             <a href="#sobre-mi" class="nav-dot" data-section="sobre-mi" data-angle="180">
                 <i class="fas fa-user"></i>
-                <span class="nav-label">Sobre Mí</span>
+                <span class="nav-label" data-i18n="nav-sobre-mi">Sobre Mí</span>
             </a>
             <a href="#contacto" class="nav-dot" data-section="contacto" data-angle="240">
                 <i class="fas fa-envelope"></i>
-                <span class="nav-label">Contacto</span>
+                <span class="nav-label" data-i18n="nav-contacto">Contacto</span>
             </a>
             <a href="#linkedin" class="nav-dot" data-section="linkedin" data-angle="300">
                 <i class="fab fa-linkedin"></i>
@@ -48,9 +48,48 @@
         </div>
     </nav>
 
+    <!-- Menú Móvil - Solo para móviles -->
+    <nav class="mobile-nav mobile-only" id="mobileNav">
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menú de navegación móvil">
+            <span class="mobile-nav-icon"></span>
+        </button>
+        <div class="mobile-nav-menu" id="mobileNavMenu">
+            <a href="#inicio" class="mobile-nav-item" data-section="inicio">
+                <i class="fas fa-home"></i>
+                <span data-i18n="nav-inicio">Inicio</span>
+            </a>
+            <a href="#proyectos" class="mobile-nav-item" data-section="proyectos">
+                <i class="fas fa-code"></i>
+                <span data-i18n="nav-proyectos">Proyectos</span>
+            </a>
+            <a href="#skills" class="mobile-nav-item" data-section="skills">
+                <i class="fas fa-tools"></i>
+                <span data-i18n="nav-skills">Skills</span>
+            </a>
+            <a href="#sobre-mi" class="mobile-nav-item" data-section="sobre-mi">
+                <i class="fas fa-user"></i>
+                <span data-i18n="nav-sobre-mi">Sobre Mí</span>
+            </a>
+            <a href="#contacto" class="mobile-nav-item" data-section="contacto">
+                <i class="fas fa-envelope"></i>
+                <span data-i18n="nav-contacto">Contacto</span>
+            </a>
+            <a href="#linkedin" class="mobile-nav-item" data-section="linkedin">
+                <i class="fab fa-linkedin"></i>
+                <span data-i18n="nav-linkedin">LinkedIn</span>
+            </a>
+        </div>
+    </nav>
+
     <!-- Toggle de Tema -->
     <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
         <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Toggle de Idioma -->
+    <button class="language-toggle" id="languageToggle" aria-label="Cambiar idioma">
+        <i class="fas fa-globe"></i>
+        <span class="lang-code">ES</span>
     </button>
 
     <!-- Animación de Fondo -->
@@ -76,16 +115,16 @@
                 <div class="col-lg-6">
                     <h1 class="display-3 fw-bold mb-3">Juan Sebastian Sarcos Ereu</h1>
                     <div class="professions mb-4">
-                        <span class="badge-profession">Desarrollador Full Stack Web</span>
-                        <span class="badge-profession">Administrador de Redes CISCO (CCNA)</span>
-                        <span class="badge-profession">Ingeniero Informático</span>
+                        <span class="badge-profession" data-i18n="profession1">Desarrollador Full Stack Web</span>
+                        <span class="badge-profession" data-i18n="profession2">Administrador de Redes CISCO (CCNA)</span>
+                        <span class="badge-profession" data-i18n="profession3">Ingeniero Informático</span>
                     </div>
-                    <p class="lead mb-4">
+                    <p class="lead mb-4" data-i18n="hero-description">
                         Apasionado desarrollador con experiencia en tecnologías modernas y redes. 
                         Especializado en crear soluciones web completas desde el frontend hasta el backend.
                     </p>
                     <div class="technologies mb-4">
-                        <h5 class="mb-3">Tecnologías:</h5>
+                        <h5 class="mb-3" data-i18n="technologies-title">Tecnologías:</h5>
                         <div class="tech-badges">
                             <span class="tech-badge">React</span>
                             <span class="tech-badge">Node.js</span>
@@ -98,7 +137,7 @@
                     </div>
                     <div class="action-buttons">
                         <a href="Currículum Programador moderno turquesa.pdf" download class="btn btn-primary btn-lg me-3 mb-3">
-                            <i class="fas fa-download me-2"></i>Descargar CV
+                            <i class="fas fa-download me-2"></i><span data-i18n="download-cv">Descargar CV</span>
                         </a>
                         <a href="https://wa.me/584247313983?text=Hola,%20me%20gustaría%20contactarte" target="_blank" class="btn btn-success btn-lg mb-3">
                             <i class="fab fa-whatsapp me-2"></i>WhatsApp
@@ -112,7 +151,7 @@
     <!-- Sección Proyectos -->
     <section id="proyectos" class="section projects-section">
         <div class="container py-5">
-            <h2 class="section-title text-center mb-5">Mis Proyectos</h2>
+            <h2 class="section-title text-center mb-5" data-i18n="projects-title">Mis Proyectos</h2>
             <div class="row g-4">
                 <!-- Proyecto GeoPlanner -->
                 <div class="col-lg-6">
@@ -121,7 +160,7 @@
                             <i class="fas fa-map-marked-alt"></i>
                         </div>
                         <h3 class="project-title">GeoPlanner</h3>
-                        <p class="project-description">
+                        <p class="project-description" data-i18n="geoplanner-description">
                             Red social geolocalizada innovadora que permite a los usuarios crear y compartir eventos, 
                             planes y actividades basadas en ubicación. Incluye funcionalidades de geolocalización en tiempo real, 
                             mapas interactivos y sistema de recomendaciones basado en preferencias del usuario.
@@ -134,7 +173,7 @@
                             <span class="tech-tag">APIs Geolocalización</span>
                         </div>
                         <a href="#" class="btn btn-outline-primary">
-                            <i class="fas fa-external-link-alt me-2"></i>Ver Proyecto
+                            <i class="fas fa-external-link-alt me-2"></i><span data-i18n="view-project">Ver Proyecto</span>
                         </a>
                     </div>
                 </div>
@@ -145,8 +184,8 @@
                         <div class="project-icon mb-3">
                             <i class="fas fa-ad"></i>
                         </div>
-                        <h3 class="project-title">Páginas de Publicidad</h3>
-                        <p class="project-description">
+                        <h3 class="project-title" data-i18n="ad-pages-title">Páginas de Publicidad</h3>
+                        <p class="project-description" data-i18n="ad-pages-description">
                             Desarrollo de páginas web modernas y atractivas para campañas publicitarias y marketing digital. 
                             Diseños responsivos optimizados para conversión, con integración de analytics y herramientas 
                             de seguimiento de rendimiento.
@@ -158,7 +197,7 @@
                             <span class="tech-tag">Bootstrap</span>
                         </div>
                         <a href="#" class="btn btn-outline-primary">
-                            <i class="fas fa-external-link-alt me-2"></i>Ver Proyecto
+                            <i class="fas fa-external-link-alt me-2"></i><span data-i18n="view-project">Ver Proyecto</span>
                         </a>
                     </div>
                 </div>
@@ -169,7 +208,7 @@
     <!-- Sección Skills -->
     <section id="skills" class="section skills-section">
         <div class="container py-5">
-            <h2 class="section-title text-center mb-5">Mis Habilidades</h2>
+            <h2 class="section-title text-center mb-5" data-i18n="skills-title">Mis Habilidades</h2>
             <div class="row g-4">
                 <!-- Frontend -->
                 <div class="col-lg-4">
@@ -228,36 +267,36 @@
     <!-- Sección Sobre Mí -->
     <section id="sobre-mi" class="section about-section">
         <div class="container py-5">
-            <h2 class="section-title text-center mb-5">Sobre Mí</h2>
+            <h2 class="section-title text-center mb-5" data-i18n="about-title">Sobre Mí</h2>
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="about-content">
-                        <p class="lead">
+                        <p class="lead" data-i18n="about-p1">
                             Soy un Ingeniero Informático venezolano apasionado por la tecnología y el desarrollo de software. 
                             Actualmente curso el 11vo trimestre de Ingeniería Informática en la Universidad Privada Dr. Rafael 
                             Belloso Chacín (URBE), combinando mi formación académica con experiencia práctica en desarrollo web.
                         </p>
-                        <p>
+                        <p data-i18n="about-p2">
                             Como desarrollador Full Stack, tengo experiencia trabajando con tecnologías modernas tanto en el 
                             frontend como en el backend. Me especializo en crear aplicaciones web escalables y eficientes, 
                             utilizando React para interfaces de usuario dinámicas y Node.js para construir APIs robustas.
                         </p>
-                        <p>
+                        <p data-i18n="about-p3">
                             Además de mi experiencia en desarrollo, cuento con certificación como Administrador de Redes CISCO 
                             (CCNA), lo que me permite tener una comprensión completa de las infraestructuras de red y cómo se 
                             integran con las aplicaciones web modernas.
                         </p>
-                        <p>
+                        <p data-i18n="about-p4">
                             Mi enfoque está en crear soluciones tecnológicas que no solo sean funcionales, sino también intuitivas 
                             y centradas en el usuario. Disfruto trabajando en proyectos desafiantes y estoy siempre aprendiendo 
                             nuevas tecnologías para mantenerme actualizado en este campo en constante evolución.
                         </p>
                         <div class="education-info mt-4">
-                            <h4 class="mb-3">Formación Académica</h4>
+                            <h4 class="mb-3" data-i18n="education-title">Formación Académica</h4>
                             <div class="education-item">
                                 <h5>Ingeniería Informática</h5>
                                 <p class="mb-1">Universidad Privada Dr. Rafael Belloso Chacín (URBE)</p>
-                                <small>2020 - Actualidad | 11vo Trimestre</small>
+                                <small data-i18n="education-period">2020 - Actualidad | 11vo Trimestre</small>
                             </div>
                         </div>
                     </div>
@@ -269,7 +308,7 @@
     <!-- Sección Contacto -->
     <section id="contacto" class="section contact-section">
         <div class="container py-5">
-            <h2 class="section-title text-center mb-5">Contacto</h2>
+            <h2 class="section-title text-center mb-5" data-i18n="contact-title">Contacto</h2>
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="contact-info text-center">
@@ -299,25 +338,19 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
-                    <h2 class="section-title mb-4">Conectemos en LinkedIn</h2>
-                    <p class="lead mb-4">
+                    <h2 class="section-title mb-4" data-i18n="linkedin-title">Conectemos en LinkedIn</h2>
+                    <p class="lead mb-4" data-i18n="linkedin-description">
                         ¿Te gustaría conocer más sobre mi experiencia profesional y proyectos? 
                         Conectemos en LinkedIn y sigamos en contacto.
                     </p>
                     <a href="https://www.linkedin.com/in/juan-sarcos-2b5831354/" target="_blank" class="btn btn-primary btn-lg linkedin-btn">
-                        <i class="fab fa-linkedin me-2"></i>Visitar mi LinkedIn
+                        <i class="fab fa-linkedin me-2"></i><span data-i18n="visit-linkedin">Visitar mi LinkedIn</span>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container text-center py-4">
-            <p class="mb-0">&copy; 2024 Juan Sebastian Sarcos Ereu. Todos los derechos reservados.</p>
-        </div>
-    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
