@@ -157,7 +157,7 @@ body {
 .radial-nav {
     position: fixed;
     top: 50%;
-    right: 40px;
+    right: 80px;
     transform: translateY(-50%);
     z-index: 1000;
 }
@@ -187,7 +187,7 @@ body {
 }
 
 .nav-center-btn.active {
-    transform: scale(1.1) rotate(180deg);
+    transform: scale(1.1);
 }
 
 .nav-icon {
@@ -205,25 +205,26 @@ body {
     height: 3px;
     background: white;
     border-radius: 2px;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    left: 0;
+    top: 50%;
+    transform-origin: center;
 }
 
 .nav-icon::before {
-    top: 8px;
-    left: 0;
+    transform: translateY(-8px);
 }
 
 .nav-icon::after {
-    bottom: 8px;
-    left: 0;
+    transform: translateY(8px);
 }
 
 .nav-center-btn.active .nav-icon::before {
-    transform: rotate(45deg) translate(8px, 8px);
+    transform: translateY(0) rotate(45deg);
 }
 
 .nav-center-btn.active .nav-icon::after {
-    transform: rotate(-45deg) translate(8px, -8px);
+    transform: translateY(0) rotate(-45deg);
 }
 
 @keyframes gradient-shift {
@@ -236,8 +237,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
     pointer-events: none;
 }
 
@@ -262,6 +263,8 @@ body {
     box-shadow: 0 5px 20px var(--shadow-purple);
     border: 2px solid rgba(255, 255, 255, 0.2);
     opacity: 0;
+    top: 50%;
+    left: 50%;
 }
 
 .nav-radial-menu.active .nav-dot {
@@ -269,44 +272,101 @@ body {
     transform: translate(-50%, -50%) scale(1);
 }
 
+/* Cálculos trigonométricos para posicionar en círculo perfecto */
+/* Radio: 90px desde el centro (120px - 30px de radio del botón) */
+/* Ángulo 0° = arriba */
 .nav-dot[data-angle="0"] {
-    top: 0;
-    left: 50%;
+    transform: translate(-50%, calc(-50% - 90px)) scale(0);
     transition-delay: 0.05s;
 }
 
+.nav-radial-menu.active .nav-dot[data-angle="0"] {
+    transform: translate(-50%, calc(-50% - 90px)) scale(1);
+}
+
+/* Ángulo 60° = arriba-derecha */
 .nav-dot[data-angle="60"] {
-    top: 25%;
-    left: 93.3%;
+    transform: translate(calc(-50% + 78px), calc(-50% - 45px)) scale(0);
     transition-delay: 0.1s;
 }
 
+.nav-radial-menu.active .nav-dot[data-angle="60"] {
+    transform: translate(calc(-50% + 78px), calc(-50% - 45px)) scale(1);
+}
+
+/* Ángulo 120° = abajo-derecha */
 .nav-dot[data-angle="120"] {
-    top: 75%;
-    left: 93.3%;
+    transform: translate(calc(-50% + 78px), calc(-50% + 45px)) scale(0);
     transition-delay: 0.15s;
 }
 
+.nav-radial-menu.active .nav-dot[data-angle="120"] {
+    transform: translate(calc(-50% + 78px), calc(-50% + 45px)) scale(1);
+}
+
+/* Ángulo 180° = abajo */
 .nav-dot[data-angle="180"] {
-    bottom: 0;
-    left: 50%;
+    transform: translate(-50%, calc(-50% + 90px)) scale(0);
     transition-delay: 0.2s;
 }
 
+.nav-radial-menu.active .nav-dot[data-angle="180"] {
+    transform: translate(-50%, calc(-50% + 90px)) scale(1);
+}
+
+/* Ángulo 240° = abajo-izquierda */
 .nav-dot[data-angle="240"] {
-    bottom: 25%;
-    left: 6.7%;
+    transform: translate(calc(-50% - 78px), calc(-50% + 45px)) scale(0);
     transition-delay: 0.25s;
 }
 
+.nav-radial-menu.active .nav-dot[data-angle="240"] {
+    transform: translate(calc(-50% - 78px), calc(-50% + 45px)) scale(1);
+}
+
+/* Ángulo 300° = arriba-izquierda */
 .nav-dot[data-angle="300"] {
-    top: 25%;
-    left: 6.7%;
+    transform: translate(calc(-50% - 78px), calc(-50% - 45px)) scale(0);
     transition-delay: 0.3s;
 }
 
-.nav-dot:hover {
-    transform: translate(-50%, -50%) scale(1.2);
+.nav-radial-menu.active .nav-dot[data-angle="300"] {
+    transform: translate(calc(-50% - 78px), calc(-50% - 45px)) scale(1);
+}
+
+/* Hover para cada posición - mantener la posición pero escalar */
+.nav-dot[data-angle="0"]:hover {
+    transform: translate(-50%, calc(-50% - 90px)) scale(1.2) !important;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+    box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+.nav-dot[data-angle="60"]:hover {
+    transform: translate(calc(-50% + 78px), calc(-50% - 45px)) scale(1.2) !important;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+    box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+.nav-dot[data-angle="120"]:hover {
+    transform: translate(calc(-50% + 78px), calc(-50% + 45px)) scale(1.2) !important;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+    box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+.nav-dot[data-angle="180"]:hover {
+    transform: translate(-50%, calc(-50% + 90px)) scale(1.2) !important;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+    box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+.nav-dot[data-angle="240"]:hover {
+    transform: translate(calc(-50% - 78px), calc(-50% + 45px)) scale(1.2) !important;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+    box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
+}
+
+.nav-dot[data-angle="300"]:hover {
+    transform: translate(calc(-50% - 78px), calc(-50% - 45px)) scale(1.2) !important;
     background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
     box-shadow: 0 8px 30px var(--shadow-pink), 0 0 40px rgba(236, 72, 153, 0.4);
 }
@@ -321,49 +381,51 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
-    transform: translateX(0);
     border: 1px solid rgba(139, 92, 246, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .nav-dot[data-angle="0"] .nav-label {
-    top: -50px;
+    top: -45px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .nav-dot[data-angle="60"] .nav-label {
-    right: -120px;
-    top: 50%;
-    transform: translateY(-50%);
+    bottom: 80px;
+    left: 50%;
+    right: auto;
+    top: auto;
+    transform: translateX(-50%);
 }
 
 .nav-dot[data-angle="120"] .nav-label {
-    right: -120px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 80px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
 }
 
 .nav-dot[data-angle="180"] .nav-label {
-    bottom: -50px;
+    bottom: -45px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .nav-dot[data-angle="240"] .nav-label {
-    left: -120px;
+    right: 80px;
     top: 50%;
     transform: translateY(-50%);
 }
 
 .nav-dot[data-angle="300"] .nav-label {
-    left: -120px;
+    right: 80px;
     top: 50%;
     transform: translateY(-50%);
 }
 
 .nav-dot:hover .nav-label {
     opacity: 1;
-    transform: translateX(-50%) translateY(-50%);
 }
 
 .nav-dot.active {
@@ -870,12 +932,13 @@ html {
 /* Responsive */
 @media (max-width: 768px) {
     .radial-nav {
-        right: 20px;
+        right: 30px;
+        top: 45%;
     }
     
     .theme-toggle {
-        bottom: 20px;
-        right: 20px;
+        bottom: 30px;
+        right: 30px;
         width: 55px;
         height: 55px;
         font-size: 22px;
@@ -894,8 +957,82 @@ html {
     }
     
     .nav-radial-menu {
-        width: 160px;
-        height: 160px;
+        width: 200px;
+        height: 200px;
+    }
+    
+    /* Ajustar posiciones en móvil con radio más pequeño */
+    .nav-dot[data-angle="0"] {
+        transform: translate(-50%, calc(-50% - 75px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="0"] {
+        transform: translate(-50%, calc(-50% - 75px)) scale(1);
+    }
+    
+    .nav-dot[data-angle="60"] {
+        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="60"] {
+        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(1);
+    }
+    
+    .nav-dot[data-angle="120"] {
+        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="120"] {
+        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(1);
+    }
+    
+    .nav-dot[data-angle="180"] {
+        transform: translate(-50%, calc(-50% + 75px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="180"] {
+        transform: translate(-50%, calc(-50% + 75px)) scale(1);
+    }
+    
+    .nav-dot[data-angle="240"] {
+        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="240"] {
+        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(1);
+    }
+    
+    .nav-dot[data-angle="300"] {
+        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(0);
+    }
+    
+    .nav-radial-menu.active .nav-dot[data-angle="300"] {
+        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(1);
+    }
+    
+    /* Hover en móvil */
+    .nav-dot[data-angle="0"]:hover {
+        transform: translate(-50%, calc(-50% - 75px)) scale(1.2) !important;
+    }
+    
+    .nav-dot[data-angle="60"]:hover {
+        transform: translate(calc(-50% + 65px), calc(-50% - 37.5px)) scale(1.2) !important;
+    }
+    
+    .nav-dot[data-angle="120"]:hover {
+        transform: translate(calc(-50% + 65px), calc(-50% + 37.5px)) scale(1.2) !important;
+    }
+    
+    .nav-dot[data-angle="180"]:hover {
+        transform: translate(-50%, calc(-50% + 75px)) scale(1.2) !important;
+    }
+    
+    .nav-dot[data-angle="240"]:hover {
+        transform: translate(calc(-50% - 65px), calc(-50% + 37.5px)) scale(1.2) !important;
+    }
+    
+    .nav-dot[data-angle="300"]:hover {
+        transform: translate(calc(-50% - 65px), calc(-50% - 37.5px)) scale(1.2) !important;
     }
     
     .section-title {

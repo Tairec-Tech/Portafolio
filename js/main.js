@@ -5,8 +5,17 @@ const navDots = document.querySelectorAll('.nav-dot');
 
 navToggle.addEventListener('click', (e) => {
     e.stopPropagation();
-    navToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
+    const isActive = navToggle.classList.contains('active');
+    
+    if (isActive) {
+        // Cerrar el menú
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+    } else {
+        // Abrir el menú
+        navToggle.classList.add('active');
+        navMenu.classList.add('active');
+    }
 });
 
 // Cerrar menú al hacer clic en un enlace
