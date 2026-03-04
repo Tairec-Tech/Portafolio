@@ -1,367 +1,421 @@
-// Navegación Radial - Solo Desktop
-const navToggle = document.getElementById('navToggle');
-const navMenu = document.getElementById('navMenu');
-const navDots = document.querySelectorAll('.nav-dot');
+/* ══════════════════════════════════════════
+   CYBERPUNK TECH — Portfolio JS
+   Tube Cursor · Preloader · Terminal · i18n
+   ══════════════════════════════════════════ */
 
-if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const isActive = navToggle.classList.contains('active');
-        
-        if (isActive) {
-            // Cerrar el menú
-            navMenu.classList.remove('active');
-            navToggle.classList.remove('active');
-        } else {
-            // Abrir el menú
-            navToggle.classList.add('active');
-            navMenu.classList.add('active');
-        }
-    });
+// ─── DOM Elements ───
+const preloader = document.getElementById('preloader');
+const preloaderName = document.getElementById('preloaderName');
+const preloaderFill = document.getElementById('preloaderFill');
+const preloaderBar = document.getElementById('preloaderBar');
+const preloaderPercent = document.getElementById('preloaderPercent');
+const navbar = document.getElementById('navbar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const languageToggle = document.getElementById('languageToggle');
+const terminalText = document.getElementById('terminalText');
 
-    // Cerrar menú al hacer clic en un enlace
-    navDots.forEach(dot => {
-        dot.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = dot.getAttribute('data-section');
-            const section = document.getElementById(targetSection);
-            
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-                setTimeout(() => {
-                    navMenu.classList.remove('active');
-                    navToggle.classList.remove('active');
-                }, 300);
-            }
-        });
-    });
+// ═══════════════════════════════════════
+// TUBE CURSOR (Canvas-based glowing trail)
+// ═══════════════════════════════════════
+const canvas = document.getElementById('cursorCanvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
 
-    // Cerrar menú al hacer clic fuera
-    document.addEventListener('click', (e) => {
-        if (navToggle && navMenu) {
-            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-            }
-        }
-    });
+let mouseX = 0, mouseY = 0;
+const trailPoints = [];
+const maxTrailLength = 30;
+
+function resizeCanvas() {
+    if (!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
-// Menú Móvil
-const mobileNavToggle = document.getElementById('mobileNavToggle');
-const mobileNavMenu = document.getElementById('mobileNavMenu');
-const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
-
-if (mobileNavToggle && mobileNavMenu) {
-    mobileNavToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const isActive = mobileNavToggle.classList.contains('active');
-        
-        if (isActive) {
-            mobileNavMenu.classList.remove('active');
-            mobileNavToggle.classList.remove('active');
-        } else {
-            mobileNavToggle.classList.add('active');
-            mobileNavMenu.classList.add('active');
-        }
-    });
-
-    // Cerrar menú al hacer clic en un enlace
-    mobileNavItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = item.getAttribute('data-section');
-            const section = document.getElementById(targetSection);
-            
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-                setTimeout(() => {
-                    mobileNavMenu.classList.remove('active');
-                    mobileNavToggle.classList.remove('active');
-                }, 300);
-            }
-        });
-    });
-
-    // Cerrar menú al hacer clic fuera
-    document.addEventListener('click', (e) => {
-        if (mobileNavToggle && mobileNavMenu) {
-            if (!mobileNavToggle.contains(e.target) && !mobileNavMenu.contains(e.target)) {
-                mobileNavMenu.classList.remove('active');
-                mobileNavToggle.classList.remove('active');
-            }
-        }
-    });
+if (canvas) {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 }
 
-// Toggle de Tema
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const themeIcon = themeToggle.querySelector('i');
-
-// Verificar tema guardado o usar tema oscuro por defecto
-const savedTheme = localStorage.getItem('theme') || 'dark';
-if (savedTheme === 'light') {
-    body.classList.remove('dark-theme');
-    body.classList.add('light-theme');
-    themeIcon.classList.remove('fa-moon');
-    themeIcon.classList.add('fa-sun');
-}
-
-themeToggle.addEventListener('click', () => {
-    if (body.classList.contains('dark-theme')) {
-        body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'light');
-    } else {
-        body.classList.remove('light-theme');
-        body.classList.add('dark-theme');
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'dark');
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    trailPoints.push({ x: mouseX, y: mouseY, time: Date.now() });
+    if (trailPoints.length > maxTrailLength) {
+        trailPoints.shift();
     }
 });
 
-// Animación al hacer scroll mejorada
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
+function drawTubeCursor() {
+    if (!ctx) { requestAnimationFrame(drawTubeCursor); return; }
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0) scale(1)';
-            }, index * 100);
-        }
-    });
-}, observerOptions);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// Observar elementos para animación
-document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.project-card, .skill-category, .about-content, .contact-info');
-    
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(50px) scale(0.95)';
-        el.style.transition = 'opacity 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-        observer.observe(el);
-    });
-});
+    // Remove old points (older than 400ms)
+    const now = Date.now();
+    while (trailPoints.length > 0 && now - trailPoints[0].time > 400) {
+        trailPoints.shift();
+    }
 
-// Efecto de parallax mejorado en orbs
-let mouseX = 0;
-let mouseY = 0;
-let targetX = 0;
-let targetY = 0;
+    if (trailPoints.length < 2) {
+        // Just draw the dot
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#b026ff';
+        ctx.shadowColor = '#b026ff';
+        ctx.shadowBlur = 15;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        requestAnimationFrame(drawTubeCursor);
+        return;
+    }
 
-document.addEventListener('mousemove', (e) => {
-    targetX = (e.clientX / window.innerWidth - 0.5) * 100;
-    targetY = (e.clientY / window.innerHeight - 0.5) * 100;
-});
+    // Draw the tube trail
+    for (let i = 1; i < trailPoints.length; i++) {
+        const p0 = trailPoints[i - 1];
+        const p1 = trailPoints[i];
+        const age = (now - p0.time) / 400; // 0 to 1 = new to old
+        const alpha = Math.max(0, 1 - age);
+        const lineWidth = Math.max(1, (1 - age) * 6);
 
-// Animación suave del parallax
-function animateParallax() {
-    mouseX += (targetX - mouseX) * 0.05;
-    mouseY += (targetY - mouseY) * 0.05;
-    
-    const orbs = document.querySelectorAll('.gradient-orb');
-    orbs.forEach((orb, index) => {
-        const speed = (index + 1) * 0.8;
-        const x = mouseX * speed * 0.1;
-        const y = mouseY * speed * 0.1;
-        const currentTransform = orb.style.transform || 'translate(0, 0)';
-        orb.style.transform = `translate(${x}px, ${y}px)`;
-    });
-    
-    requestAnimationFrame(animateParallax);
+        // Main neon purple trail
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.strokeStyle = `rgba(176, 38, 255, ${alpha * 0.8})`;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = '#b026ff';
+        ctx.shadowBlur = 20 * alpha;
+        ctx.stroke();
+
+        // Inner bright core
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.strokeStyle = `rgba(200, 90, 255, ${alpha * 0.5})`;
+        ctx.lineWidth = Math.max(0.5, lineWidth * 0.4);
+        ctx.shadowColor = '#c85aff';
+        ctx.shadowBlur = 10 * alpha;
+        ctx.stroke();
+    }
+
+    // Draw cursor dot at current position
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#b026ff';
+    ctx.shadowColor = '#b026ff';
+    ctx.shadowBlur = 25;
+    ctx.fill();
+
+    // Second glow layer
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#e0a0ff';
+    ctx.shadowBlur = 15;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(drawTubeCursor);
 }
 
-animateParallax();
+drawTubeCursor();
 
-// Indicador de sección activa en navegación
-const sections = document.querySelectorAll('.section');
+// ═══════════════════════════════════════
+// PRELOADER (fixed — no overlap)
+// ═══════════════════════════════════════
+let loadProgress = 0;
+const loadDuration = 2500;
+const loadInterval = 25;
+const loadStep = 100 / (loadDuration / loadInterval);
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop - 300) {
-            current = section.getAttribute('id');
+function runPreloader() {
+    const interval = setInterval(() => {
+        loadProgress += loadStep;
+        if (loadProgress >= 100) {
+            loadProgress = 100;
+            clearInterval(interval);
+
+            // Trigger shrink + reveal
+            setTimeout(() => {
+                if (preloaderName) preloaderName.classList.add('shrink');
+
+                setTimeout(() => {
+                    if (preloader) preloader.classList.add('done');
+                    if (navbar) navbar.classList.add('visible');
+                }, 600);
+            }, 400);
+        }
+
+        // Sync bar and name fill — both driven by loadProgress
+        if (preloaderBar) preloaderBar.style.width = loadProgress + '%';
+        if (preloaderPercent) preloaderPercent.textContent = Math.round(loadProgress) + '%';
+        // Name fill: update CSS variable instead of rewriting background
+        if (preloaderName) {
+            preloaderName.style.setProperty('--progress', `${loadProgress}%`);
+        }
+    }, loadInterval);
+}
+
+runPreloader();
+
+// ═══════════════════════════════════════
+// TERMINAL TYPEWRITER
+// ═══════════════════════════════════════
+const terminalCommands = [
+    'node server.js --port 3000',
+    'npm run build && npm run deploy',
+    'git push origin main',
+    'docker-compose up -d',
+    'ssh admin@192.168.1.1',
+    'python3 manage.py runserver',
+    'npx create-react-app my-app',
+    'ping -c 4 google.com'
+];
+
+let cmdIndex = 0;
+let charIdx = 0;
+let isTyping = true;
+let termDelay = 80;
+
+function typeTerminal() {
+    if (!terminalText) return;
+
+    const currentCmd = terminalCommands[cmdIndex];
+
+    if (isTyping) {
+        if (charIdx <= currentCmd.length) {
+            terminalText.textContent = currentCmd.substring(0, charIdx);
+            charIdx++;
+            termDelay = 50 + Math.random() * 60;
+
+            if (charIdx > currentCmd.length) {
+                isTyping = false;
+                termDelay = 2500;
+            }
+        }
+    } else {
+        terminalText.textContent = '';
+        charIdx = 0;
+        cmdIndex = (cmdIndex + 1) % terminalCommands.length;
+        isTyping = true;
+        termDelay = 500;
+    }
+
+    setTimeout(typeTerminal, termDelay);
+}
+
+setTimeout(typeTerminal, 3500);
+
+// ═══════════════════════════════════════
+// HAMBURGER MENU
+// ═══════════════════════════════════════
+if (hamburgerBtn && mobileMenu) {
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hamburgerBtn.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+    });
+
+    mobileMenu.querySelectorAll('.navbar__mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
         }
     });
-    
-    navDots.forEach(dot => {
-        dot.classList.remove('active');
-        if (dot.getAttribute('data-section') === current) {
-            dot.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// SCROLL REVEAL
+// ═══════════════════════════════════════
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
         }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const revealElements = document.querySelectorAll(
+        '.tech-stack__item, .project-card, .about__container, .about__stat, .contact__card, .cinematic__content'
+    );
+
+    revealElements.forEach((el, index) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = `${(index % 6) * 0.08}s`;
+        revealObserver.observe(el);
     });
 });
 
-// Smooth scroll mejorado
+// ═══════════════════════════════════════
+// SMOOTH SCROLL
+// ═══════════════════════════════════════
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
-        if (href !== '#' && href !== '') {
+        if (href && href !== '#') {
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                const navHeight = navbar ? navbar.offsetHeight : 70;
+                const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
             }
         }
     });
 });
 
-// Efecto de brillo en elementos al pasar el mouse
-document.querySelectorAll('.project-card, .skill-category').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
+// ═══════════════════════════════════════
+// NAVBAR SCROLL SHADOW
+// ═══════════════════════════════════════
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.style.boxShadow = '0 4px 30px rgba(176, 38, 255, 0.08)';
+                } else {
+                    navbar.style.boxShadow = 'none';
+                }
+            }
+            ticking = false;
+        });
+        ticking = true;
+    }
 });
 
-// Animación de carga inicial
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// Sistema de Traducción
+// ═══════════════════════════════════════
+// TRANSLATION SYSTEM
+// ═══════════════════════════════════════
 const translations = {
     es: {
-        // Navegación
-        'nav-inicio': 'Inicio',
-        'nav-proyectos': 'Proyectos',
-        'nav-skills': 'Skills',
+        'nav-proyectos-link': 'Proyectos',
         'nav-sobre-mi': 'Sobre Mí',
         'nav-contacto': 'Contacto',
-        'nav-linkedin': 'LinkedIn',
-        // Hero
-        'profession1': 'Desarrollador Full Stack Web',
-        'profession2': 'Administrador de Redes CISCO (CCNA)',
-        'profession3': 'Ingeniero Informático',
-        'hero-description': 'Apasionado desarrollador con experiencia en tecnologías modernas y redes. Especializado en crear soluciones web completas desde el frontend hasta el backend.',
-        'technologies-title': 'Tecnologías:',
+        'nav-inicio-mobile': 'Inicio',
+        'nav-proyectos-mobile': 'Proyectos',
+        'nav-sobre-mi-mobile': 'Sobre Mí',
+        'nav-contacto-mobile': 'Contacto',
+        'hero-subtitle': '< Desarrollador Full Stack />',
+        'hero-description': 'Ingeniero Informático · CISCO CCNA · Creando el futuro digital',
+        'hero-btn': 'Explorar Proyectos',
         'download-cv': 'Descargar CV',
-        // Proyectos
-        'projects-title': 'Mis Proyectos',
-        'geoplanner-description': 'Red social geolocalizada innovadora que permite a los usuarios crear y compartir eventos, planes y actividades basadas en ubicación. Incluye funcionalidades de geolocalización en tiempo real, mapas interactivos y sistema de recomendaciones basado en preferencias del usuario.',
-        'ad-pages-title': 'Páginas de Publicidad',
-        'ad-pages-description': 'Desarrollo de páginas web modernas y atractivas para campañas publicitarias y marketing digital. Diseños responsivos optimizados para conversión, con integración de analytics y herramientas de seguimiento de rendimiento.',
-        'view-project': 'Ver Proyecto',
-        // Skills
-        'skills-title': 'Mis Habilidades',
-        // Sobre Mí
-        'about-title': 'Sobre Mí',
-        'about-p1': 'Soy un Ingeniero Informático venezolano apasionado por la tecnología y el desarrollo de software. Actualmente curso el 11vo trimestre de Ingeniería Informática en la Universidad Privada Dr. Rafael Belloso Chacín (URBE), combinando mi formación académica con experiencia práctica en desarrollo web.',
-        'about-p2': 'Como desarrollador Full Stack, tengo experiencia trabajando con tecnologías modernas tanto en el frontend como en el backend. Me especializo en crear aplicaciones web escalables y eficientes, utilizando React para interfaces de usuario dinámicas y Node.js para construir APIs robustas.',
-        'about-p3': 'Además de mi experiencia en desarrollo, cuento con certificación como Administrador de Redes CISCO (CCNA), lo que me permite tener una comprensión completa de las infraestructuras de red y cómo se integran con las aplicaciones web modernas.',
-        'about-p4': 'Mi enfoque está en crear soluciones tecnológicas que no solo sean funcionales, sino también intuitivas y centradas en el usuario. Disfruto trabajando en proyectos desafiantes y estoy siempre aprendiendo nuevas tecnologías para mantenerme actualizado en este campo en constante evolución.',
+        'tech-label': 'Stack Tecnológico',
+        'tech-heading': 'Herramientas que domino',
+        'cinematic-title': 'Construyendo el futuro digital',
+        'cinematic-text': 'Desde infraestructura de redes hasta interfaces de usuario, cada línea de código cuenta.',
+        'projects-label': 'Portafolio',
+        'projects-heading': 'Proyectos Destacados',
+        'geo-desc': 'Red social geolocalizada con mapas interactivos y eventos en tiempo real.',
+        'ad-title': 'Páginas de Publicidad',
+        'ad-desc': 'Landing pages optimizadas para conversión con diseño responsivo y analytics.',
+        'network-title': 'Infraestructura de Redes',
+        'network-desc': 'Diseño e implementación de redes con routing, switching y seguridad CISCO.',
+        'api-desc': 'APIs escalables con autenticación JWT, validación y documentación.',
+        'frontend-desc': 'Aplicaciones web interactivas con React, TypeScript y animaciones CSS.',
+        'security-title': 'Seguridad de Redes',
+        'security-desc': 'Configuración de firewalls, ACLs, VLANs y protocolos de seguridad.',
+        'about-label': 'Sobre Mí',
+        'about-p1': 'Ingeniero Informático venezolano apasionado por la tecnología. Actualmente en el 11vo trimestre en la Universidad Privada Dr. Rafael Belloso Chacín (URBE).',
+        'about-p2': 'Desarrollador Full Stack con dominio de React, Node.js, TypeScript y Python. Certificado CISCO CCNA con experiencia en administración de redes e infraestructura.',
         'education-title': 'Formación Académica',
         'education-period': '2020 - Actualidad | 11vo Trimestre',
-        // Contacto
-        'contact-title': 'Contacto',
-        // LinkedIn
-        'linkedin-title': 'Conectemos en LinkedIn',
-        'linkedin-description': '¿Te gustaría conocer más sobre mi experiencia profesional y proyectos? Conectemos en LinkedIn y sigamos en contacto.',
-        'visit-linkedin': 'Visitar mi LinkedIn'
+        'trimester-label': 'Trimestres',
+        'years-label': 'Años Exp.',
+        'cert-label': 'Certificado',
+        'contact-label': 'Conectar',
+        'contact-heading': 'Contacto',
+        'phone-label': 'Teléfono',
+        'whatsapp-value': 'Enviar mensaje',
+        'linkedin-value': 'Conectar',
+        'footer-rights': 'Todos los derechos reservados',
     },
     en: {
-        // Navegación
-        'nav-inicio': 'Home',
-        'nav-proyectos': 'Projects',
-        'nav-skills': 'Skills',
+        'nav-proyectos-link': 'Projects',
         'nav-sobre-mi': 'About Me',
         'nav-contacto': 'Contact',
-        'nav-linkedin': 'LinkedIn',
-        // Hero
-        'profession1': 'Full Stack Web Developer',
-        'profession2': 'CISCO Network Administrator (CCNA)',
-        'profession3': 'Computer Engineer',
-        'hero-description': 'Passionate developer with experience in modern technologies and networks. Specialized in creating complete web solutions from frontend to backend.',
-        'technologies-title': 'Technologies:',
+        'nav-inicio-mobile': 'Home',
+        'nav-proyectos-mobile': 'Projects',
+        'nav-sobre-mi-mobile': 'About Me',
+        'nav-contacto-mobile': 'Contact',
+        'hero-subtitle': '< Full Stack Developer />',
+        'hero-description': 'Computer Engineer · CISCO CCNA · Building the digital future',
+        'hero-btn': 'Explore Projects',
         'download-cv': 'Download CV',
-        // Proyectos
-        'projects-title': 'My Projects',
-        'geoplanner-description': 'Innovative geolocated social network that allows users to create and share location-based events, plans, and activities. Includes real-time geolocation features, interactive maps, and a recommendation system based on user preferences.',
-        'ad-pages-title': 'Advertising Pages',
-        'ad-pages-description': 'Development of modern and attractive web pages for advertising campaigns and digital marketing. Responsive designs optimized for conversion, with analytics integration and performance tracking tools.',
-        'view-project': 'View Project',
-        // Skills
-        'skills-title': 'My Skills',
-        // Sobre Mí
-        'about-title': 'About Me',
-        'about-p1': 'I am a Venezuelan Computer Engineer passionate about technology and software development. I am currently in the 11th trimester of Computer Engineering at Dr. Rafael Belloso Chacín Private University (URBE), combining my academic training with practical experience in web development.',
-        'about-p2': 'As a Full Stack developer, I have experience working with modern technologies in both frontend and backend. I specialize in creating scalable and efficient web applications, using React for dynamic user interfaces and Node.js to build robust APIs.',
-        'about-p3': 'In addition to my development experience, I hold a certification as a CISCO Network Administrator (CCNA), which allows me to have a complete understanding of network infrastructures and how they integrate with modern web applications.',
-        'about-p4': 'My approach is to create technological solutions that are not only functional, but also intuitive and user-centered. I enjoy working on challenging projects and I am always learning new technologies to stay updated in this constantly evolving field.',
+        'tech-label': 'Tech Stack',
+        'tech-heading': 'Tools I Master',
+        'cinematic-title': 'Building the digital future',
+        'cinematic-text': 'From network infrastructure to user interfaces, every line of code matters.',
+        'projects-label': 'Portfolio',
+        'projects-heading': 'Featured Projects',
+        'geo-desc': 'Location-based social network with interactive maps and real-time events.',
+        'ad-title': 'Advertising Pages',
+        'ad-desc': 'Conversion-optimized landing pages with responsive design and analytics.',
+        'network-title': 'Network Infrastructure',
+        'network-desc': 'Network design with routing, switching and CISCO security implementation.',
+        'api-desc': 'Scalable APIs with JWT authentication, validation and documentation.',
+        'frontend-desc': 'Interactive web applications with React, TypeScript and CSS animations.',
+        'security-title': 'Network Security',
+        'security-desc': 'Firewall configuration, ACLs, VLANs and security protocols.',
+        'about-label': 'About Me',
+        'about-p1': 'Venezuelan Computer Engineer passionate about technology. Currently in the 11th trimester at Dr. Rafael Belloso Chacín Private University (URBE).',
+        'about-p2': 'Full Stack developer with expertise in React, Node.js, TypeScript and Python. CISCO CCNA certified with network administration experience.',
         'education-title': 'Academic Education',
         'education-period': '2020 - Present | 11th Trimester',
-        // Contacto
-        'contact-title': 'Contact',
-        // LinkedIn
-        'linkedin-title': 'Let\'s Connect on LinkedIn',
-        'linkedin-description': 'Would you like to know more about my professional experience and projects? Let\'s connect on LinkedIn and stay in touch.',
-        'visit-linkedin': 'Visit my LinkedIn'
+        'trimester-label': 'Trimesters',
+        'years-label': 'Years Exp.',
+        'cert-label': 'Certified',
+        'contact-label': 'Connect',
+        'contact-heading': 'Contact',
+        'phone-label': 'Phone',
+        'whatsapp-value': 'Send message',
+        'linkedin-value': 'Connect',
+        'footer-rights': 'All rights reserved',
     }
 };
 
 let currentLanguage = localStorage.getItem('language') || 'es';
 
-// Función para cambiar el idioma
 function changeLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
-    
-    // Cambiar el código de idioma en el botón
+
     const langCode = document.querySelector('.lang-code');
-    if (langCode) {
-        langCode.textContent = lang === 'es' ? 'ES' : 'EN';
-    }
-    
-    // Cambiar el atributo lang del HTML
+    if (langCode) langCode.textContent = lang.toUpperCase();
+
     document.documentElement.lang = lang;
-    
-    // Traducir todos los elementos con data-i18n
+
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
-            element.textContent = translations[lang][key];
+            if (element.querySelector('i')) {
+                const icon = element.querySelector('i').outerHTML;
+                element.innerHTML = icon + ' ' + translations[lang][key];
+            } else {
+                element.textContent = translations[lang][key];
+            }
         }
     });
 }
 
-// Inicializar idioma al cargar
 document.addEventListener('DOMContentLoaded', () => {
     changeLanguage(currentLanguage);
 });
 
-// Toggle de Idioma
-const languageToggle = document.getElementById('languageToggle');
 if (languageToggle) {
     languageToggle.addEventListener('click', () => {
-        const newLang = currentLanguage === 'es' ? 'en' : 'es';
-        changeLanguage(newLang);
+        changeLanguage(currentLanguage === 'es' ? 'en' : 'es');
     });
 }
